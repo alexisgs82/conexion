@@ -2,12 +2,11 @@ package conexion;
 
 import java.sql.*;
 import java.util.*;
+import javax.swing.JOptionPane;
 
 /**
  * 
- * @author James F. Gomez V.
- * 2021-11-20
- * Simulador-Transaccion-SubGrupo-30
+ * @author James F. Gomez V. 2021-11-20 Simulador-Transaccion-SubGrupo-30
  */
 public class Conexion {
 
@@ -21,19 +20,20 @@ public class Conexion {
 	public Connection conectar() {
 		Connection con = null;
 		PreparedStatement pstm = null;
-		// Agregar libreria al path de Mysql, version que maneja actual es 8.0.27 y SO Ubuntu 20
+		// Agregar libreria al path de Mysql, version que maneja actual es 8.0.27 y SO
+		// Ubuntu 20
 		// Conexion driver para Mysql
 		String driver = "com.mysql.cj.jdbc.Driver";
 		String user = "root";
-		String pwd = "123456";
+		String pwd = "Liberty1";
 		String url = "jdbc:mysql://localhost:3306/banco_db";
 
 		try {
 			Class.forName(driver);
 			con = DriverManager.getConnection(url, user, pwd);
 			System.out.println("Conexión establecida con éxito");
-			System.out.println("Seleccione la transacción que desee de acuerdo al número: \n1. Crear cliente \n"
-					+ "2. Salir \n");
+			System.out.println(
+					"Seleccione la transacción que desee de acuerdo al número: \n1. Crear cliente \n" + "2. Salir \n");
 			int transaccion = seleccionTransaccion.nextInt();
 			switch (transaccion) {
 			case 1:
@@ -58,10 +58,15 @@ public class Conexion {
 				+ "`numero_identificacion`, `fecha_nacimiento`, `telefono`, `email`, `direccion`)";
 
 		sql += "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-
+		System.out.println("id_cliente: ");
+		int id_cliente = seleccionTransaccion.nextInt();
+		// int id_cliente = JOptionPane.showInputDialog("id_cliente: ");
+		// String name = JOptionPane.showInputDialog("Nombre: ");
+		String name = JOptionPane.showInputDialog("Nombre: ");
+		// JOptionPane.showMessageDialog(null, "Hello " + name);
 		pstm = con.prepareStatement(sql);
-		pstm.setInt(1, 3);
-		pstm.setString(2, "Siri S");
+		pstm.setInt(1, id_cliente);
+		pstm.setString(2, name);
 		pstm.setString(3, "Goo g");
 		pstm.setString(4, "400879");
 		pstm.setString(5, "1991-01-25");
@@ -72,7 +77,8 @@ public class Conexion {
 		int aplique = pstm.executeUpdate();
 		if (aplique == 1) {
 			System.out.println(aplique + " fila insertada con éxito");
-			// Nota : esto confirmará implícitamente la transacción activa y creará una nueva
+			// Nota : esto confirmará implícitamente la transacción activa y creará una
+			// nueva
 			con.setAutoCommit(false);
 			con.commit();
 		} else {
